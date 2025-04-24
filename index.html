@@ -4,6 +4,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Recordatorios de Partido</title>
     <link rel="stylesheet" href="style.css">
+    <!-- 
+        TODO: Replace with your Google Cloud API Key and Client ID 
+        These are required for Google Drive integration.
+        Create them at https://console.cloud.google.com/
+        Enable: Google Drive API, Google Picker API
+        Configure OAuth 2.0 Consent Screen and Credentials (Web application type)
+        Make sure to add your web app's origin (e.g., http://localhost:PORT or https://yourdomain.com) 
+        to the "Authorized JavaScript origins" in your Client ID settings.
+    -->
+    <!-- <meta name="google-signin-client_id" content="YOUR_GOOGLE_CLIENT_ID.apps.googleusercontent.com"> -->
+    <!-- <meta name="google-api-key" content="YOUR_GOOGLE_API_KEY"> -->
+
     <script type="importmap">
     {
         "imports": {
@@ -16,22 +28,16 @@
     <h1>Gestor de Recordatorios de Partido</h1>
 
     <div class="container">
-        <p>Sube tu archivo Excel (.xlsx) O ingresa la URL de una hoja de cálculo de Google Sheets pública.</p>
+        <p>Sube tu archivo Excel (.xlsx) o selecciona una Hoja de Cálculo de Google Drive.</p>
         <p>Columnas esperadas: Nombre Equipo, Celular, Hora Partido, Dia Partido, Nombre Cancha</p>
         <p class="info"><strong>Nota:</strong> Esta herramienta genera enlaces para enviar mensajes manualmente. Haz clic en los botones para abrir WhatsApp. Marca manualmente la confirmación de asistencia usando el botón correspondiente.</p>
 
-        <div class="input-section">
-            <label for="excelFile" class="file-label">Seleccionar archivo Excel</label>
+        <div class="file-selection">
+            <label for="excelFile" class="file-label">Seleccionar archivo local (.xlsx)</label>
             <input type="file" id="excelFile" accept=".xlsx, .xls">
+            <button id="driveButton" class="drive-button" disabled>Seleccionar de Google Drive</button>
+             <span id="authStatus" style="margin-left: 10px; font-size: 0.9em;"></span> <!-- Added for Auth Status -->
             <span id="fileName">Ningún archivo seleccionado</span>
-        </div>
-
-        <p class="or-divider">O</p>
-
-        <div class="input-section">
-            <label for="sheetUrl" class="url-label">Ingresar URL de Google Sheet:</label>
-            <input type="url" id="sheetUrl" placeholder="https://docs.google.com/spreadsheets/d/...">
-            <button id="loadSheetButton" class="load-button">Cargar desde URL</button>
         </div>
 
 
@@ -41,5 +47,7 @@
     </div>
 
     <script src="script.js" type="module"></script>
+    <!-- Google API Loader -->
+    <script async defer src="https://apis.google.com/js/api.js" onload="gapiLoaded()"></script>
 </body>
 </html>

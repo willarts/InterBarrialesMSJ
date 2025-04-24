@@ -14,42 +14,36 @@ h1 {
 }
 
 .container {
-    max-width: 95%;
-    margin: 15px auto;
-    padding: 15px;
+    max-width: 95%; 
+    margin: 15px auto; 
+    padding: 15px; 
     background-color: #fff;
     border-radius: 8px;
     box-shadow: 0 2px 5px rgba(0,0,0,0.1);
 }
 
-.input-section {
-    margin-bottom: 15px;
-    padding: 15px;
-    border: 1px dashed #ddd;
-    border-radius: 5px;
-    background-color: #fafafa;
-}
-
-.input-section label {
-    display: block;
-    margin-bottom: 8px;
-    font-weight: bold;
-    color: #555;
+.file-selection {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px; 
+    margin-bottom: 15px; 
 }
 
 .file-label {
     display: inline-block; 
     width: auto; 
-    margin-bottom: 10px; 
+    margin-bottom: 0; 
     text-align: center; 
-    padding: 10px 15px; 
+    padding: 12px 20px; 
     background-color: #3498db;
     color: white;
     border-radius: 5px;
     cursor: pointer;
     transition: background-color 0.3s ease;
-    margin-right: 10px; 
+    flex-shrink: 0; 
 }
+
 .file-label:hover {
     background-color: #2980b9;
 }
@@ -58,52 +52,38 @@ input[type="file"] {
     display: none; 
 }
 
-#fileName {
-    display: inline-block; 
-    margin-left: 0; 
-    margin-top: 0; 
-    margin-bottom: 10px; 
-    font-style: italic;
-    color: #555;
-    font-size: 0.9em;
-    vertical-align: middle; 
-}
-
-.url-label {
-     display: block; 
-     margin-bottom: 8px; 
-}
-#sheetUrl {
-    width: calc(100% - 22px); 
-    padding: 10px;
-    margin-bottom: 10px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    font-size: 0.95em;
-    box-sizing: border-box;
-}
-
-.load-button {
-    display: inline-block;
-    padding: 10px 18px;
-    background-color: #5cb85c;
+.drive-button {
+    padding: 12px 20px;
+    background-color: #4285F4; 
     color: white;
     border: none;
     border-radius: 5px;
     cursor: pointer;
-    font-size: 0.95em;
     transition: background-color 0.3s ease;
+    font-size: 1em; 
+    line-height: 1.2; 
+    flex-shrink: 0;
 }
 
-.load-button:hover {
-    background-color: #4cae4c;
+.drive-button:hover:not(:disabled) {
+    background-color: #357ae8;
 }
 
-.or-divider {
-    text-align: center;
-    font-weight: bold;
-    margin: 20px 0;
-    color: #777;
+.drive-button:disabled {
+    background-color: #aaa;
+    cursor: not-allowed;
+}
+
+#fileName {
+    display: block; 
+    margin-left: 0; 
+    margin-top: 5px; 
+    text-align: left; 
+    font-style: italic;
+    color: #555;
+    font-size: 0.9em;
+    width: 100%; 
+    order: 3; 
 }
 
 .output-container {
@@ -135,12 +115,14 @@ input[type="file"] {
     color: #555; 
 }
 
+
 .card-actions {
     margin-top: 15px;
     display: flex;
     flex-direction: column; 
     gap: 10px; 
 }
+
 
 .whatsapp-links {
     display: contents; 
@@ -194,6 +176,7 @@ input[type="file"] {
     margin-left: 5px;
 }
 
+
 .whatsapp-link svg {
     vertical-align: middle;
     margin-right: 8px; 
@@ -237,6 +220,7 @@ input[type="file"] {
      color: #2ecc71;
 }
 
+
 .info {
     background-color: #eaf2f8;
     border-left: 4px solid #3498db;
@@ -264,83 +248,41 @@ input[type="file"] {
         max-width: 800px;
         padding: 20px;
     }
-    .input-section {
-       padding: 20px;
+     .file-selection {
+        flex-wrap: nowrap; 
+        margin-bottom: 20px;
     }
     .file-label {
-        display: inline-block;
-        width: auto;
-        margin-bottom: 0; 
     }
     #fileName {
-        display: inline;
+        display: inline; 
         margin-left: 10px;
         margin-top: 0;
-        margin-bottom: 0; 
-        text-align: left;
+        margin-bottom: 0;
+        text-align: left; 
+        width: auto; 
+        order: 0; 
     }
-    #sheetUrl {
-       width: 70%; 
-       margin-right: 10px;
-       margin-bottom: 0; 
-       display: inline-block; 
-       vertical-align: middle;
-    }
-    .load-button {
-         display: inline-block;
-         vertical-align: middle;
-         width: auto; 
-    }
-    .url-label {
-         display: block; 
-         margin-bottom: 10px;
-    }
-    .output-container {
+     .output-container {
         margin-top: 30px;
     }
-    .player-card {
+     .player-card {
         padding: 20px;
     }
-    .player-card h3 {
+     .player-card h3 {
         font-size: 1.3em;
     }
     .player-card p {
         font-size: 1em;
     }
     .card-actions {
-        flex-direction: row;
-        flex-wrap: wrap;
-        justify-content: flex-start;
+        flex-direction: row; 
+        flex-wrap: wrap; 
+        justify-content: flex-start; 
     }
     .whatsapp-link,
     .confirm-attendance-btn {
-        width: auto;
-        padding: 8px 15px;
-    }
-}
-
-@media (max-width: 599px) {
-    #sheetUrl {
-        width: 100%; 
-        margin-bottom: 10px; 
-        display: block;
-    }
-    .load-button {
-        width: 100%; 
-        display: block;
-    }
-    .file-label {
-        display: block; 
-        width: 100%;
-        box-sizing: border-box;
-        margin-right: 0;
-        margin-bottom: 5px;
-    }
-    #fileName {
-        display: block; 
-        text-align: center;
-        width: 100%;
-        margin-left: 0;
-        margin-bottom: 15px;
+        width: auto; 
+        padding: 8px 15px; 
     }
 }
