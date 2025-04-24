@@ -22,18 +22,10 @@ h1 {
     box-shadow: 0 2px 5px rgba(0,0,0,0.1);
 }
 
-.file-selection {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: 10px; 
-    margin-bottom: 15px; 
-}
-
 .file-label {
-    display: inline-block; 
-    width: auto; 
-    margin-bottom: 0; 
+    display: block; 
+    width: calc(100% - 40px); 
+    margin-bottom: 10px; 
     text-align: center; 
     padding: 12px 20px; 
     background-color: #3498db;
@@ -41,7 +33,6 @@ h1 {
     border-radius: 5px;
     cursor: pointer;
     transition: background-color 0.3s ease;
-    flex-shrink: 0; 
 }
 
 .file-label:hover {
@@ -52,38 +43,15 @@ input[type="file"] {
     display: none; 
 }
 
-.drive-button {
-    padding: 12px 20px;
-    background-color: #4285F4; 
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-    font-size: 1em; 
-    line-height: 1.2; 
-    flex-shrink: 0;
-}
-
-.drive-button:hover:not(:disabled) {
-    background-color: #357ae8;
-}
-
-.drive-button:disabled {
-    background-color: #aaa;
-    cursor: not-allowed;
-}
-
 #fileName {
     display: block; 
     margin-left: 0; 
     margin-top: 5px; 
-    text-align: left; 
+    margin-bottom: 15px; 
+    text-align: center; 
     font-style: italic;
     color: #555;
     font-size: 0.9em;
-    width: 100%; 
-    order: 3; 
 }
 
 .output-container {
@@ -248,11 +216,10 @@ input[type="file"] {
         max-width: 800px;
         padding: 20px;
     }
-     .file-selection {
-        flex-wrap: nowrap; 
-        margin-bottom: 20px;
-    }
-    .file-label {
+     .file-label {
+        display: inline-block; 
+        width: auto; 
+        margin-bottom: 0; 
     }
     #fileName {
         display: inline; 
@@ -260,8 +227,6 @@ input[type="file"] {
         margin-top: 0;
         margin-bottom: 0;
         text-align: left; 
-        width: auto; 
-        order: 0; 
     }
      .output-container {
         margin-top: 30px;
