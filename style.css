@@ -1,0 +1,253 @@
+body {
+    font-family: sans-serif;
+    line-height: 1.6;
+    margin: 0;
+    padding: 10px; 
+    background-color: #f4f7f6;
+    color: #333;
+}
+
+h1 {
+    text-align: center;
+    color: #2c3e50;
+    font-size: 1.8em; 
+}
+
+.container {
+    max-width: 95%; 
+    margin: 15px auto; 
+    padding: 15px; 
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.file-label {
+    display: block; 
+    width: calc(100% - 40px); 
+    margin-bottom: 10px; 
+    text-align: center; 
+    padding: 12px 20px; 
+    background-color: #3498db;
+    color: white;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.file-label:hover {
+    background-color: #2980b9;
+}
+
+input[type="file"] {
+    display: none; 
+}
+
+#fileName {
+    display: block; 
+    margin-left: 0; 
+    margin-top: 5px; 
+    margin-bottom: 15px; 
+    text-align: center; 
+    font-style: italic;
+    color: #555;
+    font-size: 0.9em;
+}
+
+.output-container {
+    margin-top: 20px; 
+}
+
+.player-card {
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 15px;
+    margin-bottom: 15px;
+    background-color: #f9f9f9;
+    overflow-wrap: break-word; 
+    word-wrap: break-word;
+}
+
+.player-card h3 {
+    margin-top: 0;
+    margin-bottom: 10px; 
+    color: #3498db;
+    font-size: 1.2em; 
+}
+
+.player-card p {
+    margin: 6px 0; 
+    font-size: 0.95em; 
+}
+.player-card p strong {
+    color: #555; 
+}
+
+
+.card-actions {
+    margin-top: 15px;
+    display: flex;
+    flex-direction: column; 
+    gap: 10px; 
+}
+
+
+.whatsapp-links {
+    display: contents; 
+}
+
+.whatsapp-link {
+    display: inline-flex; 
+    align-items: center; 
+    justify-content: center; 
+    padding: 10px 15px; 
+    color: white !important; 
+    text-decoration: none;
+    border-radius: 5px;
+    font-size: 0.9em;
+    transition: background-color 0.3s ease, transform 0.2s ease, opacity 0.3s ease;
+    border: none; 
+    cursor: pointer;
+    text-align: center;
+    width: 100%; 
+    box-sizing: border-box; 
+}
+
+.whatsapp-link.confirm {
+    background-color: #3498db; 
+}
+.whatsapp-link.confirm:hover {
+    background-color: #2980b9;
+    transform: translateY(-1px); 
+}
+
+.whatsapp-link.reminder {
+    background-color: #2ecc71; 
+}
+.whatsapp-link.reminder:hover {
+    background-color: #27ae60;
+    transform: translateY(-1px); 
+}
+
+.whatsapp-link.sent {
+    opacity: 0.7;
+    background-color: #bdc3c7; 
+    pointer-events: none; 
+    cursor: default;
+}
+.whatsapp-link.sent:hover {
+     transform: none; 
+}
+.whatsapp-link.sent::after {
+    content: " (Enviado)"; 
+    font-size: 0.9em;
+    margin-left: 5px;
+}
+
+
+.whatsapp-link svg {
+    vertical-align: middle;
+    margin-right: 8px; 
+    width: 18px; 
+    height: 18px;
+    fill: currentColor;
+}
+
+.confirm-attendance-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 15px;
+    border-radius: 5px;
+    border: 1px solid #bdc3c7; 
+    background-color: #ecf0f1; 
+    color: #7f8c8d; 
+    cursor: pointer;
+    font-size: 0.9em;
+    transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+    width: 100%; 
+    box-sizing: border-box; 
+    text-align: center;
+}
+
+.confirm-attendance-btn::before {
+    content: "☐"; 
+    margin-right: 8px;
+    font-size: 1.2em;
+}
+
+.confirm-attendance-btn.confirmed {
+    background-color: #e8f6ef; 
+    color: #27ae60; 
+    border-color: #2ecc71; 
+    font-weight: bold;
+}
+
+.confirm-attendance-btn.confirmed::before {
+    content: "☑"; 
+     color: #2ecc71;
+}
+
+
+.info {
+    background-color: #eaf2f8;
+    border-left: 4px solid #3498db;
+    padding: 12px;
+    margin: 15px 0;
+    font-size: 0.9em;
+    color: #2c3e50;
+}
+
+.error {
+    color: #e74c3c;
+    font-weight: bold;
+    margin-top: 15px;
+    padding: 10px;
+    background-color: #fadbd8;
+    border: 1px solid #f1948a;
+    border-radius: 4px;
+}
+
+@media (min-width: 600px) {
+    h1 {
+        font-size: 2.2em;
+    }
+    .container {
+        max-width: 800px;
+        padding: 20px;
+    }
+     .file-label {
+        display: inline-block; 
+        width: auto; 
+        margin-bottom: 0; 
+    }
+    #fileName {
+        display: inline; 
+        margin-left: 10px;
+        margin-top: 0;
+        margin-bottom: 0;
+        text-align: left; 
+    }
+     .output-container {
+        margin-top: 30px;
+    }
+     .player-card {
+        padding: 20px;
+    }
+     .player-card h3 {
+        font-size: 1.3em;
+    }
+    .player-card p {
+        font-size: 1em;
+    }
+    .card-actions {
+        flex-direction: row; 
+        flex-wrap: wrap; 
+        justify-content: flex-start; 
+    }
+    .whatsapp-link,
+    .confirm-attendance-btn {
+        width: auto; 
+        padding: 8px 15px; 
+    }
+}

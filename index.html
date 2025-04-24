@@ -1,0 +1,35 @@
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recordatorios de Partido</title>
+    <link rel="stylesheet" href="style.css">
+    <script type="importmap">
+    {
+        "imports": {
+            "xlsx": "https://cdn.jsdelivr.net/npm/xlsx@0.18.5/xlsx.mjs"
+        }
+    }
+    </script>
+</head>
+<body>
+    <h1>Gestor de Recordatorios de Partido</h1>
+
+    <div class="container">
+        <p>Sube tu archivo Excel (.xlsx) con la información de los partidos.</p>
+        <p>Columnas esperadas: Nombre Equipo, Celular, Hora Partido, Dia Partido, Nombre Cancha</p>
+        <p class="info"><strong>Nota:</strong> Esta herramienta genera enlaces para enviar mensajes manualmente. Haz clic en los botones para abrir WhatsApp. Marca manualmente la confirmación de asistencia usando el botón correspondiente.</p>
+
+
+        <label for="excelFile" class="file-label">Seleccionar archivo Excel</label>
+        <input type="file" id="excelFile" accept=".xlsx, .xls">
+        <span id="fileName">Ningún archivo seleccionado</span>
+
+        <div id="output" class="output-container">
+            <!-- Los resultados se mostrarán aquí -->
+        </div>
+    </div>
+
+    <script src="script.js" type="module"></script>
+</body>
+</html>
