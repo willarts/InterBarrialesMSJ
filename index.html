@@ -16,14 +16,24 @@
     <h1>Gestor de Recordatorios de Partido</h1>
 
     <div class="container">
-        <p>Sube tu archivo Excel (.xlsx) con la información de los partidos.</p>
+        <p>Sube tu archivo Excel (.xlsx) O ingresa la URL de una hoja de cálculo de Google Sheets pública.</p>
         <p>Columnas esperadas: Nombre Equipo, Celular, Hora Partido, Dia Partido, Nombre Cancha</p>
         <p class="info"><strong>Nota:</strong> Esta herramienta genera enlaces para enviar mensajes manualmente. Haz clic en los botones para abrir WhatsApp. Marca manualmente la confirmación de asistencia usando el botón correspondiente.</p>
 
+        <div class="input-section">
+            <label for="excelFile" class="file-label">Seleccionar archivo Excel</label>
+            <input type="file" id="excelFile" accept=".xlsx, .xls">
+            <span id="fileName">Ningún archivo seleccionado</span>
+        </div>
 
-        <label for="excelFile" class="file-label">Seleccionar archivo Excel</label>
-        <input type="file" id="excelFile" accept=".xlsx, .xls">
-        <span id="fileName">Ningún archivo seleccionado</span>
+        <p class="or-divider">O</p>
+
+        <div class="input-section">
+            <label for="sheetUrl" class="url-label">Ingresar URL de Google Sheet:</label>
+            <input type="url" id="sheetUrl" placeholder="https://docs.google.com/spreadsheets/d/...">
+            <button id="loadSheetButton" class="load-button">Cargar desde URL</button>
+        </div>
+
 
         <div id="output" class="output-container">
             <!-- Los resultados se mostrarán aquí -->
