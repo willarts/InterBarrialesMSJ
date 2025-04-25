@@ -188,10 +188,10 @@ function displayData(data) {
         const actionsContainer = card.querySelector('.card-actions');
 
         // Generate WhatsApp message texts
-        const confirmationText = encodeURIComponent(`Hola *${teamName}*, por favor *confirma* tu asistencia al partido del día *${formattedMatchDay}* a las *${formattedMatchTime}* en *${fieldName}*. Responde *SI o NO*.`);
+        const confirmationText = encodeURIComponent(`Hola *${teamName}*, por favor *confirma* tu asistencia al partido del día *${formattedMatchDay}* a las *${formattedMatchTime} hs* en *${fieldName}*. Responde *SI o NO*.`);
         const confirmationLink = `https://wa.me/${phone}?text=${confirmationText}`;
 
-        const reminderText = encodeURIComponent(`Recordatorio: Partido hoy *${formattedMatchDay}* a las *${formattedMatchTime}* en *${fieldName}*. Requisitos: puntualidad, uniforme completo. ¡Te esperamos!`);
+        const reminderText = encodeURIComponent(`Recordatorio: Partido hoy *${formattedMatchDay}* a las *${formattedMatchTime} hs* en *${fieldName}*. Requisitos: puntualidad, uniforme completo. ¡Te esperamos!`);
         const reminderLink = `https://wa.me/${phone}?text=${reminderText}`;
 
         // Create "Confirmación" link/button
