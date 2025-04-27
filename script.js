@@ -130,7 +130,6 @@ function formatExcelTime(timeValue) {
     return 'N/A';
 }
 
-
 function displayData(data) {
     outputDiv.innerHTML = '';
 
@@ -139,129 +138,265 @@ function displayData(data) {
         return;
     }
 
-    let validRowsFound = false;
+    // Create controls div
+    const controlsDiv = document.createElement('div');
+    controlsDiv.className = 'data-controls';
+    
+    const resetBtn = document.createElement('button');
+    resetBtn.className = 'reset-btn';
+    resetBtn.textContent = 'Resetear Datos';
+    resetBtn.onclick = () => {
+        if (confirm('¿Estás seguro de que deseas borrar todos los datos? Esta acción no se puede deshacer.')) {
+            localStorage.removeItem('tableData');
+            outputDiv.innerHTML = '';
+        }
+    };
+    controlsDiv.appendChild(resetBtn);
+    outputDiv.appendChild(controlsDiv);
 
-    data.forEach((row, index) => { // Add index for unique IDs if needed
+    let validRows = [];
+    
+    data.forEach((row, index) => {
         const normalizedRow = {};
         for (const key in row) {
-            if (Object.hasOwnProperty.call(row, key)) {
-                // Normalize key: trim whitespace, convert to lower case, remove internal spaces
-                const normalizedKey = key.trim().toLowerCase().replace(/\s+/g, '');
-                 // Store original value (xlsx raw:false provides formatted, csv might be raw)
-                 normalizedRow[normalizedKey] = row[key];
-            }
+            const normalizedKey = key.trim().toLowerCase().replace(/\s+/g, '');
+            normalizedRow[normalizedKey] = row[key];
         }
 
         const teamName = normalizedRow['nombreequipo'] || 'N/A';
-        let phone = normalizedRow['celular'] || '';
+        let phone = String(normalizedRow['celular'] || '').replace(/\D/g, '');
         const rawMatchTime = normalizedRow['horapartido'];
         const rawMatchDay = normalizedRow['diapartido'];
         const fieldName = normalizedRow['nombrecancha'] || 'N/A';
-
-        phone = String(phone).replace(/\D/g, ''); // Clean phone number
 
         const formattedMatchDay = formatExcelDate(rawMatchDay);
         const formattedMatchTime = formatExcelTime(rawMatchTime);
 
         if (!phone || teamName === 'N/A' || formattedMatchDay === 'N/A' || formattedMatchTime === 'N/A' || fieldName === 'N/A') {
-            console.warn("Skipping row due to missing/invalid data:", row, { phone, teamName, formattedMatchDay, formattedMatchTime, fieldName });
             return;
         }
 
-        validRowsFound = true;
-
-        const card = document.createElement('div');
-        card.className = 'player-card';
-        card.dataset.id = `player-${index}`; // Add a unique identifier
-
-        card.innerHTML = `
-            <h3>${teamName}</h3>
-            <p><strong>Celular:</strong> ${phone}</p>
-            <p><strong>Día:</strong> ${formattedMatchDay}</p>
-            <p><strong>Hora:</strong> ${formattedMatchTime}</p>
-            <p><strong>Cancha:</strong> ${fieldName}</p>
-            <div class="card-actions">
-                <!-- Links and button will be added here -->
-            </div>
-        `;
-
-        const actionsContainer = card.querySelector('.card-actions');
-
-        // Generate WhatsApp message texts
-        const confirmationText = encodeURIComponent(`Hola *${teamName}*, por favor *confirma* tu asistencia al partido del día *${formattedMatchDay}* a las *${formattedMatchTime} hs* en *${fieldName}*. Responde *SI o NO*.`);
-        const confirmationLink = `https://wa.me/${phone}?text=${confirmationText}`;
-
-        const reminderText = encodeURIComponent(`Recordatorio: Partido hoy *${formattedMatchDay}* a las *${formattedMatchTime} hs* en *${fieldName}*. Requisitos: puntualidad, uniforme completo. ¡Te esperamos!`);
-        const reminderLink = `https://wa.me/${phone}?text=${reminderText}`;
-
-        // Create "Confirmación" link/button
-        const confirmBtn = document.createElement('a');
-        confirmBtn.href = confirmationLink;
-        confirmBtn.target = "_blank";
-        confirmBtn.className = "whatsapp-link confirm";
-        confirmBtn.innerHTML = `${whatsappIconSvg} Enviar Solicitud Confirmación`;
-        confirmBtn.addEventListener('click', function(e) {
-            // Mark as sent visually, but allow the default link action
-            this.classList.add('sent');
-            // Optionally, update text or icon further if needed
-             this.innerHTML = `${whatsappIconSvg} Enviando...`; // Temp text
-             // Restore text after a short delay to allow navigation
-             setTimeout(() => {
-                 // Check if the button is still marked as sent before restoring text
-                 if (this.classList.contains('sent')) {
-                     this.innerHTML = `${whatsappIconSvg} Enviar Solicitud Confirmación`;
-                 }
-             }, 1500); // Short delay
-        }, { once: false }); // Allow clicking again if needed, though 'sent' style persists visually
-        actionsContainer.appendChild(confirmBtn);
-
-        // Create "Recordatorio" link/button
-        const reminderBtn = document.createElement('a');
-        reminderBtn.href = reminderLink;
-        reminderBtn.target = "_blank";
-        reminderBtn.className = "whatsapp-link reminder";
-        reminderBtn.innerHTML = `${whatsappIconSvg} Enviar Recordatorio`;
-         reminderBtn.addEventListener('click', function(e) {
-            this.classList.add('sent');
-            this.innerHTML = `${whatsappIconSvg} Enviando...`;
-             setTimeout(() => {
-                  // Check if the button is still marked as sent before restoring text
-                 if (this.classList.contains('sent')) {
-                    this.innerHTML = `${whatsappIconSvg} Enviar Recordatorio`;
-                 }
-             }, 1500); // Short delay
-        }, { once: false });
-        actionsContainer.appendChild(reminderBtn);
-
-        // Create Manual Confirmation Button
-        const manualConfirmBtn = document.createElement('button');
-        manualConfirmBtn.className = 'confirm-attendance-btn';
-        manualConfirmBtn.textContent = 'Marcar Confirmado'; // Initial text
-        manualConfirmBtn.type = 'button'; // Ensure it's not a submit button
-
-        manualConfirmBtn.addEventListener('click', function() {
-            this.classList.toggle('confirmed');
-            if (this.classList.contains('confirmed')) {
-                this.textContent = 'Confirmado'; // Update text when confirmed
-            } else {
-                this.textContent = 'Marcar Confirmado'; // Revert text when unconfirmed
-            }
-            // No backend, so this state is visual only for the current session
+        validRows.push({
+            id: `row-${index}`,
+            teamName,
+            phone,
+            matchDay: formattedMatchDay,
+            matchTime: formattedMatchTime,
+            fieldName,
+            confirmed: false,
+            messagesSent: { confirmation: false, reminder: false }
         });
-
-        actionsContainer.appendChild(manualConfirmBtn);
-
-
-        outputDiv.appendChild(card);
     });
 
-     // Update the message based on whether valid rows were found
-    if (!validRowsFound) {
-         if (data.length > 0) {
-             outputDiv.innerHTML = '<p class="error">No se encontraron filas con datos válidos completos (Equipo, Celular, Día, Hora, Cancha) en el archivo. Por favor, revisa el contenido y formato de las columnas.</p>';
-         } else {
-             // This case is already handled at the start of the function, but kept for clarity
-             outputDiv.innerHTML = '<p>El archivo está vacío o no contiene datos reconocibles.</p>';
-         }
+    // Sort rows by time
+    validRows.sort((a, b) => {
+        const dateComparison = a.matchDay.localeCompare(b.matchDay);
+        if (dateComparison !== 0) return dateComparison;
+        return a.matchTime.localeCompare(b.matchTime);
+    });
+
+    // Find scheduled matches
+    const scheduledMatches = findScheduledMatches(validRows);
+
+    // Save to localStorage
+    localStorage.setItem('tableData', JSON.stringify(validRows));
+    localStorage.setItem('scheduledMatches', JSON.stringify(scheduledMatches));
+
+    // Create and display table
+    createTable(validRows);
+    displayScheduledMatches(scheduledMatches);
+}
+
+function findScheduledMatches(rows) {
+    const matches = [];
+    const matchMap = new Map();
+
+    // Group teams by match details (time, day, field)
+    rows.forEach(row => {
+        const matchKey = `${row.matchDay}-${row.matchTime}-${row.fieldName}`;
+        if (!matchMap.has(matchKey)) {
+            matchMap.set(matchKey, []);
+        }
+        matchMap.get(matchKey).push(row);
+    });
+
+    // Find matches with exactly two teams
+    for (const [key, teams] of matchMap.entries()) {
+        if (teams.length === 2) {
+            const [team1, team2] = teams;
+            matches.push({
+                matchDay: team1.matchDay,
+                matchTime: team1.matchTime,
+                fieldName: team1.fieldName,
+                team1: {
+                    name: team1.teamName,
+                    confirmed: team1.confirmed
+                },
+                team2: {
+                    name: team2.teamName,
+                    confirmed: team2.confirmed
+                }
+            });
+        }
+    }
+
+    return matches;
+}
+
+function displayScheduledMatches(matches) {
+    const matchesSection = document.createElement('div');
+    matchesSection.className = 'scheduled-matches';
+    matchesSection.innerHTML = '<h2>Partidos Programados</h2>';
+
+    if (matches.length === 0) {
+        matchesSection.innerHTML += '<p>No hay partidos programados actualmente.</p>';
+    } else {
+        const matchesList = document.createElement('div');
+        matchesList.className = 'matches-list';
+
+        matches.forEach(match => {
+            const matchCard = document.createElement('div');
+            matchCard.className = `match-card ${match.team1.confirmed && match.team2.confirmed ? 'ready' : ''}`;
+            
+            matchCard.innerHTML = `
+                <div class="match-header">
+                    <span class="match-date">${match.matchDay}</span>
+                    <span class="match-time">${match.matchTime}</span>
+                    <span class="match-field">${match.fieldName}</span>
+                </div>
+                <div class="match-teams">
+                    <div class="team ${match.team1.confirmed ? 'confirmed' : ''}">
+                        <span class="team-name">${match.team1.name}</span>
+                        <span class="confirmation-status">${match.team1.confirmed ? '✓ Confirmado' : 'Pendiente'}</span>
+                    </div>
+                    <div class="match-vs">VS</div>
+                    <div class="team ${match.team2.confirmed ? 'confirmed' : ''}">
+                        <span class="team-name">${match.team2.name}</span>
+                        <span class="confirmation-status">${match.team2.confirmed ? '✓ Confirmado' : 'Pendiente'}</span>
+                    </div>
+                </div>
+                ${match.team1.confirmed && match.team2.confirmed ? 
+                    '<div class="match-status ready">¡Partido confirmado!</div>' : 
+                    '<div class="match-status pending">Esperando confirmaciones</div>'}
+            `;
+            
+            matchesList.appendChild(matchCard);
+        });
+
+        matchesSection.appendChild(matchesList);
+    }
+
+    outputDiv.appendChild(matchesSection);
+}
+
+function createTable(rows) {
+    if (rows.length === 0) {
+        outputDiv.innerHTML += '<p>No se encontraron filas con datos válidos.</p>';
+        return;
+    }
+
+    const table = document.createElement('table');
+    table.className = 'data-table';
+
+    // Create header
+    const thead = document.createElement('thead');
+    thead.innerHTML = `
+        <tr>
+            <th>Equipo</th>
+            <th>Celular</th>
+            <th>Día</th>
+            <th>Hora</th>
+            <th>Cancha</th>
+            <th>Acciones</th>
+        </tr>
+    `;
+    table.appendChild(thead);
+
+    // Create body
+    const tbody = document.createElement('tbody');
+    rows.forEach(row => {
+        const tr = document.createElement('tr');
+        // Add confirmed class if row is confirmed
+        if (row.confirmed) {
+            tr.className = 'confirmed';
+        }
+        tr.innerHTML = `
+            <td>${row.teamName}</td>
+            <td>${row.phone}</td>
+            <td>${row.matchDay}</td>
+            <td>${row.matchTime}</td>
+            <td>${row.fieldName}</td>
+            <td>
+                <div class="table-actions">
+                    <a href="https://wa.me/${row.phone}?text=${encodeURIComponent(`Hola ${row.teamName}, por favor confirma tu asistencia al partido del día ${row.matchDay} a las ${row.matchTime} en ${row.fieldName}. Responde SI o NO.`)}"
+                       target="_blank"
+                       class="whatsapp-link confirm ${row.messagesSent.confirmation ? 'sent' : ''}"
+                       onclick="markMessageSent(event, '${row.id}', 'confirmation')">
+                       ${whatsappIconSvg} Solicitar Confirmación
+                    </a>
+                    <a href="https://wa.me/${row.phone}?text=${encodeURIComponent(`Estamos listos para iniciar los preparativos previos al partido de *${row.teamName}*. Les pedimos acercarse a la mesa de *${row.fieldName}* por favor. Requisitos: Presentarse como minimo 15min antes del comienzo del partido, puntualidad, uniforme completo. ¡Te esperamos!`)}"
+                       target="_blank"
+                       class="whatsapp-link reminder ${row.messagesSent.reminder ? 'sent' : ''}"
+                       onclick="markMessageSent(event, '${row.id}', 'reminder')">
+                       ${whatsappIconSvg} Enviar Recordatorio
+                    </a>
+                    <button class="confirm-attendance-btn ${row.confirmed ? 'confirmed' : ''}"
+                            onclick="toggleConfirmation('${row.id}')">
+                            ${row.confirmed ? 'Confirmado' : 'Marcar Confirmado'}
+                    </button>
+                </div>
+            </td>
+        `;
+        tbody.appendChild(tr);
+    });
+    table.appendChild(tbody);
+    outputDiv.appendChild(table);
+}
+
+window.markMessageSent = function(event, rowId, messageType) {
+    const savedData = JSON.parse(localStorage.getItem('tableData'));
+    const row = savedData.find(r => r.id === rowId);
+    if (row) {
+        row.messagesSent[messageType] = true;
+        localStorage.setItem('tableData', JSON.stringify(savedData));
+    }
+    setTimeout(function() {
+        location.reload();
+    }, 3000);
+};
+
+window.toggleConfirmation = function(rowId) {
+    const savedData = JSON.parse(localStorage.getItem('tableData'));
+    const row = savedData.find(r => r.id === rowId);
+    if (row) {
+        row.confirmed = !row.confirmed;
+        localStorage.setItem('tableData', JSON.stringify(savedData));
+        
+        // Update scheduled matches
+        const scheduledMatches = findScheduledMatches(savedData);
+        localStorage.setItem('scheduledMatches', JSON.stringify(scheduledMatches));
+        
+        // Refresh the display
+        createTable(savedData);
+        displayScheduledMatches(scheduledMatches);
+    }
+    location.reload();
+};
+
+// Add this to initialize the page with saved data
+document.addEventListener('DOMContentLoaded', loadSavedData);
+
+function loadSavedData() {
+    const savedData = localStorage.getItem('tableData');
+    const savedMatches = localStorage.getItem('scheduledMatches');
+    
+    if (savedData) {
+        const parsedData = JSON.parse(savedData);
+        createTable(parsedData);
+        
+        // If we have saved matches, display them
+        if (savedMatches) {
+            displayScheduledMatches(JSON.parse(savedMatches));
+        }
     }
 }

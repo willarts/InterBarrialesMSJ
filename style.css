@@ -83,14 +83,12 @@ input[type="file"] {
     color: #555; 
 }
 
-
 .card-actions {
     margin-top: 15px;
     display: flex;
     flex-direction: column; 
     gap: 10px; 
 }
-
 
 .whatsapp-links {
     display: contents; 
@@ -144,7 +142,6 @@ input[type="file"] {
     margin-left: 5px;
 }
 
-
 .whatsapp-link svg {
     vertical-align: middle;
     margin-right: 8px; 
@@ -188,7 +185,6 @@ input[type="file"] {
      color: #2ecc71;
 }
 
-
 .info {
     background-color: #eaf2f8;
     border-left: 4px solid #3498db;
@@ -206,6 +202,73 @@ input[type="file"] {
     background-color: #fadbd8;
     border: 1px solid #f1948a;
     border-radius: 4px;
+}
+
+.data-controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 20px 0;
+}
+
+.reset-btn {
+    background-color: #e74c3c;
+    color: white;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.reset-btn:hover {
+    background-color: #c0392b;
+}
+
+.data-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+    background: white;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+.data-table th,
+.data-table td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+.data-table th {
+    background-color: #f8f9fa;
+    font-weight: bold;
+    color: #2c3e50;
+}
+
+.data-table tr:hover {
+    background-color: #f5f6fa;
+}
+
+.data-table tr.confirmed {
+    background-color: #e8f6ef !important; /* Using !important to override hover state */
+    border-left: 4px solid #2ecc71;
+}
+
+.data-table tr.confirmed:hover {
+    background-color: #d5f0e5 !important;
+}
+
+.table-actions {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.table-actions .whatsapp-link,
+.table-actions .confirm-attendance-btn {
+    padding: 6px 12px;
+    font-size: 0.85em;
 }
 
 @media (min-width: 600px) {
@@ -249,5 +312,125 @@ input[type="file"] {
     .confirm-attendance-btn {
         width: auto; 
         padding: 8px 15px; 
+    }
+}
+
+@media (max-width: 768px) {
+    .data-table {
+        display: block;
+        overflow-x: auto;
+        white-space: nowrap;
+    }
+    
+    .table-actions {
+        flex-direction: column;
+    }
+    
+    .table-actions .whatsapp-link,
+    .table-actions .confirm-attendance-btn {
+        width: 100%;
+    }
+}
+
+.scheduled-matches {
+    margin-top: 30px;
+    padding: 20px;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.scheduled-matches h2 {
+    color: #2c3e50;
+    margin-bottom: 20px;
+}
+
+.matches-list {
+    display: grid;
+    gap: 20px;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+}
+
+.match-card {
+    border: 1px solid #e1e1e1;
+    border-radius: 8px;
+    padding: 15px;
+    background: #f8f9fa;
+    transition: all 0.3s ease;
+}
+
+.match-card.ready {
+    background: #e8f6ef;
+    border-color: #2ecc71;
+}
+
+.match-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 15px;
+    color: #666;
+    font-size: 0.9em;
+}
+
+.match-teams {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin: 15px 0;
+}
+
+.team {
+    flex: 1;
+    text-align: center;
+    padding: 10px;
+}
+
+.team.confirmed {
+    color: #27ae60;
+}
+
+.team-name {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.confirmation-status {
+    font-size: 0.8em;
+    color: #666;
+}
+
+.match-vs {
+    padding: 0 15px;
+    font-weight: bold;
+    color: #7f8c8d;
+}
+
+.match-status {
+    text-align: center;
+    padding: 8px;
+    border-radius: 4px;
+    font-size: 0.9em;
+}
+
+.match-status.ready {
+    background: #2ecc71;
+    color: white;
+}
+
+.match-status.pending {
+    background: #f1c40f;
+    color: #34495e;
+}
+
+@media (max-width: 600px) {
+    .matches-list {
+        grid-template-columns: 1fr;
+    }
+    
+    .match-header {
+        flex-direction: column;
+        align-items: center;
+        gap: 5px;
     }
 }
